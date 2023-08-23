@@ -1,18 +1,19 @@
 {
   "name": "teamflow-pro",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "TeamFlow Pro is a powerful command-line interface tool designed to streamline the management of organizational structures. With intuitive commands, it empowers users to effortlessly handle departments, roles, and employees within an organization. The app provides an efficient way to view all departments, roles, and employees through formatted tables, making it easy to access essential information. Users can seamlessly add new departments, roles, and employees, ensuring that the organizational structure remains up-to-date. Moreover, the app allows for the dynamic updating of employee roles, maintaining accurate records across the board. Experience a hassle-free approach to organizational management with the TeamFlow Pro.",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "Victoria Alawi | Light of Twelve | www.lightoftwelve.com",
   "license": "",
   "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "inquirer": "^8.2.4",
-    "express": "^4.17.1",
-    "mysql2": "^2.2.5"
+    "mysql2": "^2.3.3"
   }
 }
