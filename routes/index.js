@@ -4,11 +4,11 @@ const { main } = require('../cli/main');
 
 const departmentRouter = require('./departmentRouter');
 // const employeeRouter = require('./employeeRouter');
-// const roleRouter = require('./roleRouter');
+const rolesRouter = require('./rolesRouter');
 
 router.use('/departments', departmentRouter);
 // router.use('/employees', employeeRouter);
-// router.use('/roles', roleRouter);
+router.use('/roles', rolesRouter);
 
 router.get('/getting-started', async (req, res) => {
     try {

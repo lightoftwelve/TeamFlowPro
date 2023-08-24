@@ -65,15 +65,20 @@ async function deleteDepartmentPrompt(main) {
     // Get the name of the department to delete for display purposes
     const departmentToDeleteName = departmentChoices.find(choice => choice.value === answers.departmentToDelete).name;
 
-    // Delete the selected department
-    await dbQueries.deleteDepartment(answers.departmentToDelete);
+    try {
+        // Try to delete the selected department
+        await dbQueries.deleteDepartment(answers.departmentToDelete);
 
-    // Display all departments after the delete operation
-    const updatedDepartments = await dbQueries.getAllDepartments();
-    console.table(updatedDepartments);
+        // Display all departments after the delete operation
+        const updatedDepartments = await dbQueries.getAllDepartments();
+        console.table(updatedDepartments);
 
-    // Now print using the saved department name
-    console.log(`Deleted department: ${departmentToDeleteName}`);
+        // Now print using the saved department name
+        console.log(`Deleted department: ${departmentToDeleteName}`);
+    } catch (error) {
+        // Handle the error by informing the user
+        console.error('Unable to delete the department because there are roles associated with it. Delete or reassign those roles first.');
+    }
 
     // Ask if the user wants to delete another department
     const continueDeletePrompt = {
