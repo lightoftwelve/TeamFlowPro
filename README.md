@@ -1,7 +1,7 @@
 # TeamFlow Pro
 
 ## Overview
-TeamFlow Pro is a powerful command-line interface tool designed to streamline the management of organizational structures. With intuitive commands, it empowers users to effortlessly handle departments, roles, and employees within an organization. The app provides an efficient way to view all departments, roles, and employees through formatted tables, making it easy to access essential information. Users can seamlessly add new departments, roles, and employees, ensuring that the organizational structure remains up-to-date. Moreover, the app allows for the dynamic updating of employee roles, maintaining accurate records across the board. Experience a hassle-free approach to organizational management with the TeamFlow Pro.
+TeamFlow Pro is a powerful command-line interface tool designed to streamline the management of organizational structures. Although it is primarily a command-line tool, it includes routes for convenience if someone wants to convert it into a frontend project. With intuitive commands, it empowers users to effortlessly handle departments, roles, and employees within an organization. The app provides an efficient way to view all departments, roles, and employees through formatted tables, making it easy to access essential information. Users can seamlessly add new departments, roles, and employees, ensuring that the organizational structure remains up-to-date. Moreover, the app allows for the dynamic updating of employee roles, maintaining accurate records across the board. Additionally, it provides options to view employees by manager, update managers, remove an employee, delete a role or department, and view department budgets. It also enables multiple consecutive actions, such as adding multiple employees before returning to the main menu. Experience a hassle-free approach to organizational management with TeamFlow Pro.
 
 ## Table of Contents
 - [Features](#features)
@@ -21,6 +21,12 @@ TeamFlow Pro is a powerful command-line interface tool designed to streamline th
 - **Add a Role**: Add a new role with specified details into the database.
 - **Add an Employee**: Users can add a new employee's details to the database.
 - **Update an Employee Role**: Modify the role of an existing employee in the database.
+- **View Employees by Manager**: Displays a list of employees reporting to a specific manager.
+- **Update Managers**: Allows modifying the manager an employee reports to.
+- **Remove an Employee**: Deletes an employee from the database.
+- **Delete a Role**: Removes a role from the database.
+- **Delete a Department**: Deletes a department from the database.
+- **View Department Budget**: Displays the utilized budget of a specific department.
 
 ## Usage Guide
 1. **Installation**:
@@ -41,16 +47,24 @@ TeamFlow Pro is a powerful command-line interface tool designed to streamline th
     Follow the on-screen prompts to interact with the application.
 
 ## Screenshots
-// coming soon
+![Welcoming screen of app](/images/teamflow-pro-screenshot-1.png)
+![Main menu](/images/teamflow-pro-screenshot-2.png)
+![Deparment menu](/images/teamflow-pro-screenshot-3.png)
+![Roles Menu](/images/teamflow-pro-screenshot-4.png)
+![Employee Menu](/images/teamflow-pro-screenshot-5.png)
+![Example of app charts](/images/teamflow-pro-screenshot-6.png)
 
 ## Technologies Used
 - Node.js
 - Inquirer
 - MySQL
+- DotENV
+- Express
+- MySQL2
+- Prompt-Sync
 
 ## Demonstration
-// Not live yet
-Link: [Watch Here](https://github.com/lightoftwelve)
+Link: [Watch Here](https://drive.google.com/file/d/1gNo7PEQs0dayV7avvi-BG1g8ni6NvmwB/view)
 
 ## Credits
 This project was independently developed by myself, Victoria Alawi.
