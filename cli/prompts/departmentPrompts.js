@@ -114,7 +114,7 @@ async function viewDepartmentBudget(main) {
         ]);
 
         // 3. Fetch employee information for the chosen department
-        const employeesInDepartment = await dbQueries.viewEmployeesByDepartment(departmentId);
+        const employeesInDepartment = await dbQueries.getEmployeesByDepartment(departmentId);
         if (employeesInDepartment && employeesInDepartment.length > 0) {
             console.table(employeesInDepartment);
             // 4. Fetch and display the budget

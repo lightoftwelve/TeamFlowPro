@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS business_db;
 CREATE DATABASE IF NOT EXISTS business_db; -- Create the database
 USE business_db; -- Switch to the business database
 
@@ -23,6 +24,8 @@ CREATE TABLE employees (
     last_name VARCHAR(30) NOT NULL,
     role_id INT,
     manager_id INT,
+    custom_salary DECIMAL,
+    is_manager TINYINT(1) DEFAULT 0,
     FOREIGN KEY (role_id) REFERENCES roles(id),
     FOREIGN KEY (manager_id) REFERENCES employees(id)
 );

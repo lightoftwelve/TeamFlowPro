@@ -62,16 +62,134 @@ async function getDepartmentBudget(departmentId) {
 //                            Employees
 // --------------------------------------------------------
 
-// VIEW EMPLOYEES BY DEPARTMENT
-async function viewEmployeesByDepartment(departmentId) {
+// VIEW ALL EMPLOYEES
+// The COALESCE function checks the values in the order they're provided and returns the first non-null value.
+async function getAllEmployees() {
     try {
         const [results] = await db.promise().query(`
-        SELECT employees.*, roles.salary 
-        FROM employees 
-        JOIN roles ON employees.role_id = roles.id 
-        WHERE roles.department_id = ?        
-        `, [departmentId]);
+            SELECT employees.id, employees.first_name, employees.last_name, roles.title AS role_name, 
+            COALESCE(employees.custom_salary, roles.salary) AS employee_salary,
+            departments.name AS department_name, CONCAT(managers.first_name, ' ', managers.last_name) AS manager_name 
+            FROM employees 
+            LEFT JOIN roles ON employees.role_id = roles.id 
+            LEFT JOIN departments ON roles.department_id = departments.id 
+            LEFT JOIN employees AS managers ON employees.manager_id = managers.id
+        `);
         return results;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// VIEW ALL MANAGERS
+async function getAllManagers() {
+    try {
+        const query = `
+            SELECT 
+                m.id, 
+                CONCAT(m.first_name, " ", m.last_name) AS manager_name,
+                GROUP_CONCAT(DISTINCT d.name) AS departments_managed,
+                COUNT(e.id) AS number_of_employees,
+                SUM(r.salary) AS total_budget
+            FROM employees m
+            LEFT JOIN employees e ON m.id = e.manager_id
+            LEFT JOIN roles r ON e.role_id = r.id
+            LEFT JOIN departments d ON r.department_id = d.id
+            WHERE e.manager_id IS NOT NULL
+            GROUP BY m.id
+            ORDER BY m.id;
+        `;
+        const [results] = await db.promise().query(query);
+        return results;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+async function getSimpleManagersList() {
+    try {
+        const query = `
+            SELECT id, first_name, last_name 
+            FROM employees 
+            WHERE is_manager = 1;
+        `;
+        const [results] = await db.promise().query(query);
+        return results;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// GET EMPLOYEES BY MANAGER
+async function getEmployeesByManager(managerId) {
+    try {
+        const [results] = await db.promise().query(`
+            SELECT 
+                e.id, 
+                e.first_name, 
+                e.last_name, 
+                r.title AS role_name, 
+                d.name AS department_name, 
+                r.salary
+            FROM employees e
+            LEFT JOIN roles r ON e.role_id = r.id
+            LEFT JOIN departments d ON r.department_id = d.id
+            WHERE e.manager_id = ?
+        `, [managerId]);
+        return results;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// VIEW EMPLOYEE BY DEPARTMENT
+async function getEmployeesByDepartment(departmentId) {
+    try {
+        const query = `
+            SELECT 
+                employees.id, 
+                employees.first_name, 
+                employees.last_name, 
+                roles.title AS role_name, 
+                departments.name AS department_name, 
+                CONCAT(managers.first_name, ' ', managers.last_name) AS manager_name,
+                roles.salary
+            FROM employees 
+            JOIN roles ON employees.role_id = roles.id 
+            JOIN departments ON roles.department_id = departments.id
+            LEFT JOIN employees AS managers ON employees.manager_id = managers.id
+            WHERE roles.department_id = ?
+        `;
+        const [results] = await db.promise().query(query, [departmentId]);
+        return results;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// ADD AN EMPLOYEE
+async function addEmployee(employeeData) {
+    try {
+        const [results] = await db.promise().query("INSERT INTO employees SET ?", employeeData);
+        return results.insertId;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// UPDATE AN EMPLOYEES MANAGER
+async function updateEmployeeManager(employeeId, newManagerId) {
+    try {
+        await db.promise().query("UPDATE employees SET manager_id = ? WHERE id = ?", [newManagerId, employeeId]);
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+// REMOVE AN EMPLOYEE
+async function deleteEmployee(id) {
+    try {
+        await db.promise().query("DELETE FROM employees WHERE id = ?", [id]);
     } catch (err) {
         throw new Error(err);
     }
@@ -81,11 +199,11 @@ async function viewEmployeesByDepartment(departmentId) {
 async function getEmployeeById(employeeId) {
     try {
         const query = `
-            SELECT employees.id, employees.first_name, employees.last_name, roles.title AS role, roles.salary, departments.name AS department
-            FROM employees
-            JOIN roles ON employees.role_id = roles.id
-            JOIN departments ON roles.department_id = departments.id
-            WHERE employees.id = ?;
+        SELECT employees.id, employees.first_name, employees.last_name, roles.title AS role, roles.salary, departments.name AS department
+        FROM employees
+        LEFT JOIN roles ON employees.role_id = roles.id
+        LEFT JOIN departments ON roles.department_id = departments.id
+        WHERE employees.id = ?;        
         `;
         const [results] = await db.promise().query(query, [employeeId]);
         return results;
@@ -166,7 +284,14 @@ module.exports = {
     getDepartmentBudget,
 
     // employees
-    viewEmployeesByDepartment,
+    getAllEmployees,
+    getAllManagers,
+    getSimpleManagersList,
+    getEmployeesByManager,
+    getEmployeesByDepartment,
+    addEmployee,
+    updateEmployeeManager,
+    deleteEmployee,
     getEmployeeById,
 
     // roles
@@ -174,5 +299,5 @@ module.exports = {
     addRole,
     deleteRole,
     updateEmployeeRole,
-    getRolesByDepartmentId
+    getRolesByDepartmentId,
 };

@@ -5,7 +5,6 @@ const dbQueries = require('../../db/queries');
 async function viewAllRoles(main) {
     const roles = await dbQueries.getAllRoles();
     console.table(roles);
-
     main();
 }
 
@@ -170,6 +169,10 @@ async function updateEmployeeRole(main) {
         const currentDetails = await dbQueries.getEmployeeById(answers.employeeId);
         console.table(currentDetails);
         console.log("You are viewing current details of the selected employee\n");
+
+        // Display all available roles to provide context before selection
+        console.log("Available Roles:");
+        console.table(roles);
 
         const roleAnswer = await inquirer.prompt([
             {
