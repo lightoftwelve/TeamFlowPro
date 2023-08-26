@@ -1,6 +1,8 @@
+// Required modules
 const inquirer = require('inquirer');
 const prompt = require('prompt-sync')();
 
+// Function to display a welcome message
 async function welcomeMessage() {
     try {
         console.log(`Welcome to                                  
@@ -10,13 +12,17 @@ async function welcomeMessage() {
    |_| |___|__,|_|_|_|__|  |_|___|_____|  |__|  |_| |___|                                                      
         `);
 
+        // Prompt the user to press ENTER to continue
         prompt('Press ENTER to continue...');
+        // Call the main function
         main();
     } catch (error) {
+        // Log any errors that occur
         console.error('Error displaying welcome message:', error);
     }
 }
 
+// Main function
 async function main() {
     try {
         const mainChoices = [
@@ -25,6 +31,7 @@ async function main() {
             'Manage employees',
         ];
 
+        // Prompt the user to select a choice
         const userChoices = await inquirer.prompt([
             {
                 type: 'list',
@@ -36,6 +43,7 @@ async function main() {
 
         const selectedChoice = userChoices.mainChoice;
 
+        // Call the appropriate module based on the selected choice
         if (selectedChoice === 'Manage departments') {
             const departmentPromptsModule = require('./prompts/departmentPrompts');
             await departmentPromptsModule.handleDepartmentPrompts(main); // <-- pass the main function as a parameter
@@ -47,7 +55,9 @@ async function main() {
             await rolePromptsModule.handleRolePrompts(main);
         }
     } catch (error) {
+        // Log any errors that occur
         console.error("\nAn error occurred:", error.message);
+        // Ask the user if they want to continue after an error
         const shouldContinue = await inquirer.prompt([
             {
                 type: 'confirm',
@@ -57,8 +67,10 @@ async function main() {
             }
         ]);
         if (shouldContinue.continue) {
+            // Call the main function again if the user wants to continue
             main();
         } else {
+            // Exit the application if the user does not want to continue
             console.log("Goodbye!");
             process.exit(1); // Exit with an error code
         }

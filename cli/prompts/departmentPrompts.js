@@ -2,14 +2,18 @@ const inquirer = require('inquirer');
 const dbQueries = require('../../db/queries');
 
 // VIEW ALL DEPARTMENTS
-async function viewAllDepartments(main) { // <-- accept main as a parameter
+// Function to display all departments
+async function viewAllDepartments(main) {
+    // Fetch all departments
     const departments = await dbQueries.getAllDepartments();
+    // Display the departments in the console
     console.table(departments);
-
-    main(); // return to start
+    // Return to main menu
+    main();
 }
 
 // ADD A DEPARTMENT
+// Function to prompt the user for adding a new department
 async function addDepartmentPrompt(main) {
     // 1. Ask the user for the name of the new department
     const departmentPrompt = {
@@ -25,12 +29,11 @@ async function addDepartmentPrompt(main) {
     // 3. Display all departments, including the newly added one
     const departments = await dbQueries.getAllDepartments();
     console.table(departments);
-
     console.log(`Added department: ${answers.departmentName}`);
 
     // 4. Ask the user if they'd like to add another department
     const continuePrompt = {
-        type: 'confirm', // This will provide a 'y/n' choice
+        type: 'confirm',
         name: 'continueAdding',
         message: 'Would you like to add another department?',
     };
@@ -44,22 +47,20 @@ async function addDepartmentPrompt(main) {
 }
 
 // DELETE A DEPARTMENT
+// Function to prompt the user for deleting a department
 async function deleteDepartmentPrompt(main) {
     // Get all departments from the database
     const departments = await dbQueries.getAllDepartments();
-
     const departmentChoices = departments.map((department) => ({
         name: department.name,
         value: department.id,
     }));
-
     const deletePrompt = {
         type: 'list',
         name: 'departmentToDelete',
         message: 'Select a department to delete:',
         choices: departmentChoices,
     };
-
     const answers = await inquirer.prompt(deletePrompt);
 
     // Get the name of the department to delete for display purposes
@@ -82,7 +83,7 @@ async function deleteDepartmentPrompt(main) {
 
     // Ask if the user wants to delete another department
     const continueDeletePrompt = {
-        type: 'confirm', // This will provide a 'y/n' choice
+        type: 'confirm',
         name: 'continueDeleting',
         message: 'Would you like to delete another department?',
     };
@@ -96,6 +97,7 @@ async function deleteDepartmentPrompt(main) {
 }
 
 // VIEW DEPARTMENT BUDGET
+// Function to display the budget of a selected department
 async function viewDepartmentBudget(main) {
     try {
         // 1. Fetch all departments
@@ -135,16 +137,17 @@ async function viewDepartmentBudget(main) {
 
         // 6. Decide next steps based on the user's response
         if (another) {
-            viewDepartmentBudget(main); // Run the same function again
+            viewDepartmentBudget(main);
         } else {
-            main(); // Return to main menu
+            main();
         }
     } catch (error) {
         console.error("An error occurred:", error);
-        main(); // If an error occurs, return to main menu for simplicity
+        main();
     }
 }
 
+// Exporting functions for external use
 module.exports = {
     handleDepartmentPrompts: async (main) => {
         const departmentAction = await inquirer.prompt([
