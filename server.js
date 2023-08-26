@@ -17,3 +17,17 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     // console.log(`Server running on http://localhost:${PORT}`);
 });
+
+
+// async function welcomeMessage() {
+//     try {
+//         console.log(`Welcome to                                  
+//  _____               _____ _              _____         
+//  |_   _|___ ___ _____|   __| |___ _ _ _   |  _  |___ ___ 
+//    | | | -_| .'|     |   __| | . | | | |  |   __|  _| . |
+//    |_| |___|__,|_|_|_|__|  |_|___|_____|  |__|  |_| |___|                                                      
+//         `);
+//     } catch (error) {
+//         console.error('Error displaying welcome message:', error);
+//     }
+// }

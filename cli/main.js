@@ -1,4 +1,21 @@
 const inquirer = require('inquirer');
+const prompt = require('prompt-sync')();
+
+async function welcomeMessage() {
+    try {
+        console.log(`Welcome to                                  
+ _____               _____ _              _____         
+ |_   _|___ ___ _____|   __| |___ _ _ _   |  _  |___ ___ 
+   | | | -_| .'|     |   __| | . | | | |  |   __|  _| . |
+   |_| |___|__,|_|_|_|__|  |_|___|_____|  |__|  |_| |___|                                                      
+        `);
+
+        prompt('Press ENTER to continue...');
+        main();
+    } catch (error) {
+        console.error('Error displaying welcome message:', error);
+    }
+}
 
 async function main() {
     try {
@@ -48,4 +65,4 @@ async function main() {
     }
 }
 
-main();
+welcomeMessage();
